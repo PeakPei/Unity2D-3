@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: 6dd6caa1fd7884d288472b487da0e915
-timeCreated: 1474938290
+timeCreated: 1475289573
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - gameManager: {fileID: 1000010178281412, guid: 1ca8c6e960c494bbd937610290f80d1b,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

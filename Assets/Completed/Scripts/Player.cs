@@ -21,14 +21,18 @@ public class Player : MovingObject
 		base.Start ();
 	}
 
-	private void onDisable() {
+	private void onDisable ()
+	{
 		GameManager.instance.PlayerFoodPoints = food;
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
 	{
-		if (!GameManager.instance.playersTurn) return;
+		if (!GameManager.instance.playersTurn) {
+			GameManager.instance.doUpdate ();
+			return;
+		}
 
 		int horizontal = 0;
 		int vertical = 0;
@@ -46,7 +50,7 @@ public class Player : MovingObject
 
 	}
 
-	protected override void AttemptMove<T> (int xDir, int yDir) 
+	protected override void AttemptMove<T> (int xDir, int yDir)
 	{
 		food--;
 		base.AttemptMove<T> (xDir, yDir);
@@ -55,40 +59,43 @@ public class Player : MovingObject
 		GameManager.instance.playersTurn = false;
 	}
 
-	private void onTriggerEnter2D (Collider2D other) {
+	private void onTriggerEnter2D (Collider2D other)
+	{
 		if (other.tag == "exit") {
 			Invoke ("restart", restartLevelDelay);
 			enabled = false;
-		}
-		else if (other.tag == "Food") {
+		} else if (other.tag == "Food") {
 			food += pointsPerFood;
 			other.gameObject.SetActive (false);
-		}
-		else if (other.tag == "Soda") {
+		} else if (other.tag == "Soda") {
 			food += pointsPerSoda;
 			other.gameObject.SetActive (false);
 		}
 	}
 
-	protected override void onCantMove<T> (T component) {
+	protected override void onCantMove<T> (T component)
+	{
 		Wall hitWall = component as Wall;
 		hitWall.damageWall (wallDamage);
 		animator.SetTrigger ("playerChop");
 	}
 
-	private void restart() {
+	private void restart ()
+	{
 		SceneManager.LoadScene (0);
 	}
 
-	public void looseFood (int loss) {
+	public void looseFood (int loss)
+	{
 		animator.SetTrigger ("playerHit");
 		food -= loss;
 		checkIfGameOver ();
 	}
 
-	private void checkIfGameOver() {
+	private void checkIfGameOver ()
+	{
 		if (food <= 0) {
-			GameManager.instance.GameOver();
+			GameManager.instance.GameOver ();
 		}
 	}
 }

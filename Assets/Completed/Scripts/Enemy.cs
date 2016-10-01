@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy : MovingObject {
+public class Enemy : MovingObject
+{
 
 	public int playerDamage;
 
@@ -11,13 +12,16 @@ public class Enemy : MovingObject {
 
 
 	// Use this for initialization
-	protected override void Start () {
+	protected override void Start ()
+	{
+		GameManager.instance.addEnemyToList (this);
 		animator = GetComponent<Animator> ();
 		target = GameObject.FindGameObjectWithTag ("Player").transform;
 		base.Start ();
 	}
 
-	protected override void AttemptMove<T> (int xDir, int yDir) {
+	protected override void AttemptMove<T> (int xDir, int yDir)
+	{
 		if (skipMove) {
 			skipMove = false;
 			return;
@@ -27,13 +31,14 @@ public class Enemy : MovingObject {
 		skipMove = true;
 	}
 
-	public void moveEnemy() {
+	public void moveEnemy ()
+	{
 		int xDir = 0;
 		int yDir = 0;
 
 		if (Mathf.Abs (target.position.x - transform.position.x) < float.Epsilon)
 			yDir = target.position.y > transform.position.y ? 1 : -1;
-		else 
+		else
 			xDir = target.position.x > transform.position.x ? 1 : -1;
 
 		AttemptMove<Player> (xDir, yDir);
@@ -42,6 +47,7 @@ public class Enemy : MovingObject {
 	protected override void onCantMove<T> (T component)
 	{
 		Player hitPlayer = component as Player;
+		animator.SetTrigger ("enemyAttack");
 		hitPlayer.looseFood (playerDamage); 
 	}
 }
